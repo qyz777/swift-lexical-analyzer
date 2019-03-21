@@ -8,23 +8,37 @@
 
 /* Begin PBXBuildFile section */
 		A0084A4C22433216009EDB4D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0084A4B22433216009EDB4D /* main.swift */; };
+		A0084A5522433716009EDB4D /* analysis.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = A0084A522243342F009EDB4D /* analysis.txt */; };
+		A0084A572243374B009EDB4D /* Analyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0084A562243374B009EDB4D /* Analyzer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		A0084A4622433216009EDB4D /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
+			dstPath = /usr/share/man/man1;
 			dstSubfolderSpec = 0;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
+		};
+		A0084A542243370B009EDB4D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				A0084A5522433716009EDB4D /* analysis.txt in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		A0084A4822433216009EDB4D /* swift-lexical-analyzer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "swift-lexical-analyzer"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0084A4B22433216009EDB4D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		A0084A522243342F009EDB4D /* analysis.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = analysis.txt; sourceTree = "<group>"; };
+		A0084A562243374B009EDB4D /* Analyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analyzer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +72,8 @@
 			isa = PBXGroup;
 			children = (
 				A0084A4B22433216009EDB4D /* main.swift */,
+				A0084A522243342F009EDB4D /* analysis.txt */,
+				A0084A562243374B009EDB4D /* Analyzer.swift */,
 			);
 			path = "swift-lexical-analyzer";
 			sourceTree = "<group>";
@@ -72,6 +88,7 @@
 				A0084A4422433216009EDB4D /* Sources */,
 				A0084A4522433216009EDB4D /* Frameworks */,
 				A0084A4622433216009EDB4D /* CopyFiles */,
+				A0084A542243370B009EDB4D /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -120,6 +137,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0084A4C22433216009EDB4D /* main.swift in Sources */,
+				A0084A572243374B009EDB4D /* Analyzer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
