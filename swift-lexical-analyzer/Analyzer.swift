@@ -37,9 +37,11 @@ class Analyzer {
         while tempLine.count > 0 {
             if let tuple = isSymbol(&tempLine) {
                 list.append(tuple)
-            } else if let tuple = isLetterOrNumber(&tempLine) {
+            } else if let tuple = isLetter(&tempLine) {
                 list.append(tuple)
-            }else {
+            } else if let tuple = isNumber(&tempLine) {
+                list.append(tuple)
+            } else {
                 if tempLine.first != " " {
                     print("解析错误: 在第\(index + 1)行")
                 }
@@ -71,10 +73,10 @@ class Analyzer {
         return nil
     }
     
-    private func isLetterOrNumber(_ str: inout String) -> (Int, String)? {
+    private func isLetter(_ str: inout String) -> (Int, String)? {
         var key = ""
         for c in str {
-            if (c >= "a" && c <= "z") || (c >= "A" && c <= "Z") || (c >= "0" && c <= "9") {
+            if (c >= "a" && c <= "z") || (c >= "A" && c <= "Z") {
                 key.append(c)
             } else {
                 break
@@ -96,6 +98,23 @@ class Analyzer {
                 wordAddress += 1
                 return tuple
             }
+        }
+        return nil
+    }
+    
+    private func isNumber(_ str: inout String) -> (Int, String)? {
+        var key = ""
+        for c in str {
+            if c >= "0" && c <= "9" {
+                key.append(c)
+            } else {
+                break
+            }
+        }
+        if key.count > 0 {
+            let range = key.endIndex..<str.endIndex
+            str = String(str[range])
+            return (14, key)
         }
         return nil
     }
