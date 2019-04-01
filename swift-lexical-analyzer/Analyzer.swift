@@ -10,7 +10,7 @@ import Foundation
 
 class Analyzer {
     
-    private let symbols: [String: Int] = ["main": 2, "int": 3, "if": 4, "else": 5, "while": 6, "do": 7, "<": 8, ">": 8, "!=": 8, ">=": 8, "<=": 8, "==": 8, "+": 8, "-": 8, "*": 8, "/": 8, "=": 8, ",": 9, ";": 10, "(": 11, ")": 11, "{": 12, "}": 12, "return": 13]
+    private let symbols: [String: Int] = ["main": 3, "int": 3, "if": 3, "else": 3, "while": 3, "do": 3, "return": 3 , "<": 4, ">": 4, "!=": 4, ">=": 4, "<=": 4, "==": 4, "+": 4, "+=": 4, "-": 4, "*": 4, "/": 4, "=": 4, ",": 5, ";": 5, "(": 5, ")": 5, "{": 5, "}": 5]
     
     private var code: String = ""
     
@@ -34,18 +34,23 @@ class Analyzer {
     
     private func lineAnalyze(_ line: String, _ index: Int) {
         var tempLine = line
+        var columnIndex = 0
         while tempLine.count > 0 {
             if let tuple = isSymbol(&tempLine) {
+                columnIndex += tuple.1.count
                 list.append(tuple)
             } else if let tuple = isLetter(&tempLine) {
+                columnIndex += tuple.1.count
                 list.append(tuple)
             } else if let tuple = isNumber(&tempLine) {
+                columnIndex += tuple.1.count
                 list.append(tuple)
             } else {
                 if tempLine.first != " " {
-                    print("解析错误: 在第\(index + 1)行")
+                    print("解析错误: 在第\(index + 1)行,第\(columnIndex + 1)列")
                 }
                 tempLine.remove(at: .init(encodedOffset: 0))
+                columnIndex += 1
             }
         }
     }
@@ -55,30 +60,37 @@ class Analyzer {
     }
     
     private func isSymbol(_ str: inout String) -> (Int, String)? {
-        let maxCount = 6
         var key = ""
-        var index = 0
+        var canReturn = false
+        var useKey = ""
         for c in str {
-            if index >= maxCount {
-                break
-            }
             key.append(c)
             if symbolCode(key) != nil {
-                let range = key.endIndex..<str.endIndex
-                str = String(str[range])
-                return (symbols[key]!, key)
+                canReturn = true
+                useKey = key
             }
-            index += 1
+        }
+        if canReturn {
+            let range = useKey.endIndex..<str.endIndex
+            str = String(str[range])
+            return (symbols[useKey]!, useKey)
         }
         return nil
     }
     
     private func isLetter(_ str: inout String) -> (Int, String)? {
         var key = ""
+        var canReturn = false
         for c in str {
             if (c >= "a" && c <= "z") || (c >= "A" && c <= "Z") {
+                canReturn = true
                 key.append(c)
             } else {
+                if canReturn {
+                    if c >= "0" && c <= "9" {
+                        key.append(c)
+                    }
+                }
                 break
             }
         }
@@ -114,7 +126,7 @@ class Analyzer {
         if key.count > 0 {
             let range = key.endIndex..<str.endIndex
             str = String(str[range])
-            return (14, key)
+            return (2, key)
         }
         return nil
     }
