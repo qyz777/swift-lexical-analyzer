@@ -10,32 +10,39 @@ import Foundation
 
 class Analyzer {
     
-    private let symbols: [String: Int] = ["main": 1, "int": 2, "if": 3, "else": 4, "while": 5, "do": 6, "<": 7, ">": 8, "!=": 9, ">=": 10, "<=": 11, "==": 12, ",": 13, ";": 14, "(": 15, ")": 16, "{": 17, "}": 18, "+": 19, "-": 20, "*": 21, "/": 22, "=": 23]
+    private let symbols: [String: Int] = ["main": 2, "int": 3, "if": 4, "else": 5, "while": 6, "do": 7, "<": 8, ">": 8, "!=": 8, ">=": 8, "<=": 8, "==": 8, "+": 8, "-": 8, "*": 8, "/": 8, "=": 8, ",": 9, ";": 10, "(": 11, ")": 11, "{": 12, "}": 12, "return": 13]
     
     private var code: String = ""
     
-    private var list: [(String, Int)] = []
+    private var list: [(Int, String)] = []
+    
+    private var wordInfo: [String: Int] = [:]
+    
+    private var wordAddress: Int = 0
     
     public func analyze() {
         let codeLineArray = code.split(separator: "\n")
+        var index = 0
         for line in codeLineArray {
-            lineAnalyze(String(line))
+            lineAnalyze(String(line), index)
+            index += 1
         }
         for t in list {
             print(t)
         }
     }
     
-    private func lineAnalyze(_ line: String) {
+    private func lineAnalyze(_ line: String, _ index: Int) {
         var tempLine = line
         while tempLine.count > 0 {
             if let tuple = isSymbol(&tempLine) {
                 list.append(tuple)
-            } else if let tuple = isLetter(&tempLine) {
+            } else if let tuple = isLetterOrNumber(&tempLine) {
                 list.append(tuple)
-            } else if let tuple = isNumber(&tempLine) {
-                list.append(tuple)
-            } else {
+            }else {
+                if tempLine.first != " " {
+                    print("解析错误: 在第\(index + 1)行")
+                }
                 tempLine.remove(at: .init(encodedOffset: 0))
             }
         }
@@ -45,8 +52,8 @@ class Analyzer {
         return symbols[key]
     }
     
-    private func isSymbol(_ str: inout String) -> (String, Int)? {
-        let maxCount = 4
+    private func isSymbol(_ str: inout String) -> (Int, String)? {
+        let maxCount = 6
         var key = ""
         var index = 0
         for c in str {
@@ -57,27 +64,38 @@ class Analyzer {
             if symbolCode(key) != nil {
                 let range = key.endIndex..<str.endIndex
                 str = String(str[range])
-                return (key, symbols[key]!)
+                return (symbols[key]!, key)
             }
             index += 1
         }
         return nil
     }
     
-    private func isNumber(_ str: inout String) -> (String, Int)? {
-        let key = str.first!
-        if key >= "0" && key <= "9" {
-            str.remove(at: .init(encodedOffset: 0))
-            return (String(key), 24)
+    private func isLetterOrNumber(_ str: inout String) -> (Int, String)? {
+        var key = ""
+        for c in str {
+            if (c >= "a" && c <= "z") || (c >= "A" && c <= "Z") || (c >= "0" && c <= "9") {
+                key.append(c)
+            } else {
+                break
+            }
         }
-        return nil
-    }
-    
-    private func isLetter(_ str: inout String) -> (String, Int)? {
-        let key = str.first!
-        if (key >= "a" && key <= "z") || (key >= "A" && key <= "Z") {
-            str.remove(at: .init(encodedOffset: 0))
-            return (String(key), 0)
+        if key.count > 0 {
+//            1. 从str中去除已经别解析为单词的字符串
+            let range = key.endIndex..<str.endIndex
+            str = String(str[range])
+//            2. 尝试从Info中去除已经被解析的letter
+            let address = wordInfo[key]
+            if address != nil {
+//                3. 取到已经解析过得字符直接返回地址
+                return (1, String(address!))
+            } else {
+//                4. 未取到则生成新的地址
+                let tuple = (1, String(wordAddress))
+                wordInfo[key] = wordAddress
+                wordAddress += 1
+                return tuple
+            }
         }
         return nil
     }

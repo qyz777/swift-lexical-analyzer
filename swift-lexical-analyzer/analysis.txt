@@ -1,10 +1,10 @@
 int main()
 {
-    int a, b;
+    int abc, b;
     b = 100;
-    a = 103;
-    if (a >= b) {
-        a = a + b;
+    abc = 103;!
+    if (abc >= b) {
+        abc = abc + b;
     }
     return 0;
 }
